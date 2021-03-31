@@ -31,11 +31,28 @@ namespace LicencjatAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<LoginController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // POST api/login
+        [HttpPost("login")]
+        public IActionResult Login([FromBody]User user)
         {
-            return "value";
+            MySqlConnection conn = new MySqlConnection(Constants.connectionString);
+            MySqlDataReader reader;
+            MySqlCommand checkCredentials = new MySqlCommand(Constants.checkLoginCredentials, conn);
+            checkCredentials.Parameters.Add("@email", MySqlDbType.VarChar).Value = user.email;
+            checkCredentials.Parameters.Add("@password", MySqlDbType.VarChar).Value = user.password;
+            conn.Open();
+            reader = checkCredentials.ExecuteReader();
+            reader.Read();
+            if (reader.HasRows)
+            {
+                reader.Close();
+                return Accepted();
+            }
+            else
+            {
+                reader.Close();
+                return Unauthorized();
+            }
         }
 
         // POST api/register

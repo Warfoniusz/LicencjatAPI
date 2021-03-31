@@ -20,5 +20,11 @@ namespace LicencjatAPI
         public static string checkIfAlreadyRegisteredQuery = $"select * from users WHERE email LIKE @email";
 
         #endregion
+
+        #region MYSQL CHECK LOGIN CRDENTIALS
+
+        public static string checkLoginCredentials = $"select * from users WHERE email = @email AND password = @password";
+
+        #endregion
     }
 }
