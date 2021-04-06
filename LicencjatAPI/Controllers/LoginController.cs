@@ -16,7 +16,9 @@ namespace LicencjatAPI.Controllers
         public string fullName { get; set; }
         public string password { get; set; }
         public string email { get; set; }
+        public int userId { get; set; }
     }
+
     
     [Route("api/[controller]")]
     [ApiController]
@@ -46,7 +48,19 @@ namespace LicencjatAPI.Controllers
             if (reader.HasRows)
             {
                 reader.Close();
-                return Accepted();
+                MySqlCommand selectUserId = new MySqlCommand("SELECT id FROM users WHERE email = @email", conn);
+                selectUserId.Parameters.Add("@email", MySqlDbType.VarChar).Value = user.email;
+                MySqlCommand selectUsername = new MySqlCommand("SELECT username FROM users WHERE email = @email", conn);
+                selectUsername.Parameters.Add("@email", MySqlDbType.VarChar).Value = user.email;
+                MySqlCommand selectUserEmail = new MySqlCommand("SELECT email FROM users WHERE email = @email", conn);
+                selectUserEmail.Parameters.Add("@email", MySqlDbType.VarChar).Value = user.email;
+                user.userId = (int) selectUserId.ExecuteScalar();
+                user.fullName = (string)selectUsername.ExecuteScalar();
+                user.email = (string)selectUserEmail.ExecuteScalar();
+                return Ok(user);
+
+
+                
             }
             else
             {
