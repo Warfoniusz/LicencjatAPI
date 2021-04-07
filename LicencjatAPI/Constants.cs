@@ -26,5 +26,10 @@ namespace LicencjatAPI
         public static string checkLoginCredentials = $"select * from users WHERE email = @email AND password = @password";
 
         #endregion
+
+        #region MYSQL ADD NEW POST TO DB
+
+        public static string insertNewPostQuery = $"insert into posts (ownerId, ownerName, postName, postDescription, postCity) values (@ownerId, @ownerName, @postName, @postDescription, @postCity)";
+        #endregion
     }
 }

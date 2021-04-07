@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
 using MySqlConnector;
+using LicencjatAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,7 +34,7 @@ namespace LicencjatAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // POST api/login
+        // POST api/login/login
         [HttpPost("login")]
         public IActionResult Login([FromBody]User user)
         {
@@ -69,7 +70,7 @@ namespace LicencjatAPI.Controllers
             }
         }
 
-        // POST api/register
+        // POST api/login/test
         [HttpPost("test")]
         public IActionResult Register([FromBody]User user)
             {
@@ -104,6 +105,38 @@ namespace LicencjatAPI.Controllers
                     return Created(string.Empty, null);
 
             
+        }
+
+        //POST api/login/addPost
+        [HttpPost("addPost")]
+        public IActionResult addPost([FromBody]PostModel post)
+        {
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(Constants.connectionString);
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+
+                //$"insert into posts (ownerId, ownerName, postName, postDescription, postCity, created_at) values (@ownerId, @ownerName, @postName, @postDescription, @postCity)";
+                cmd.CommandText = Constants.insertNewPostQuery;
+                cmd.Parameters.Add("@ownerId", MySqlDbType.Int32).Value = post.userId;
+                cmd.Parameters.Add("@ownerName", MySqlDbType.String).Value = post.fullName;
+                cmd.Parameters.Add("@postName", MySqlDbType.String).Value = post.postTitle;
+                cmd.Parameters.Add("@postDescription", MySqlDbType.String).Value = post.postDescription;
+                cmd.Parameters.Add("@postCity", MySqlDbType.String).Value = post.postCity;
+                conn.Open();
+                cmd.ExecuteNonQueryAsync();
+                conn.Close();
+                
+            }
+            catch(Exception ex)
+            { 
+
+            }
+
+            return Created(string.Empty, null);
+
+
         }
 
         // PUT api/<LoginController>/5
