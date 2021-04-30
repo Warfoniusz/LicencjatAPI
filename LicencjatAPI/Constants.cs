@@ -11,7 +11,7 @@ namespace LicencjatAPI
 
         #region MYSQL INSERT NEW USER QUERY
 
-        public static string InsertNewUserQuery = $"insert into users (username, password_salt, password, email, created_at) values (@username, @password_salt, @password, @email, @timestamp)";
+        public static string InsertNewUserQuery = $"insert into users (username, password_salt, password, email, profile_photo_base64, description, sex, city) values (@username, @password_salt, @password, @email, @profile_photo_base64, @description, @sex, @city)";
 
         #endregion
 
@@ -23,13 +23,34 @@ namespace LicencjatAPI
 
         #region MYSQL CHECK LOGIN CRDENTIALS
 
-        public static string checkLoginCredentials = $"select * from users WHERE email = @email AND password = @password";
+        public static string checkLoginCredentials = $"select * from users WHERE email = @email";
 
         #endregion
 
         #region MYSQL ADD NEW POST TO DB
 
         public static string insertNewPostQuery = $"insert into posts (ownerId, ownerName, postName, postDescription, postCity) values (@ownerId, @ownerName, @postName, @postDescription, @postCity)";
+        #endregion
+
+        #region MYSQL ADD POST TO FOLLOWED BY USER
+
+        public static string insertNewFollowedPost = $"INSERT into posts_to_user (userId, postId, acceptanceStatus) values (@userId, @postId, @acceptanceStatus)";
+        #endregion
+
+        #region MYSQL SELECT POSTS WHICH LOGGED USER FOLLOWS
+        public static string selectFollowedPosts = $"SELECT * FROM posts JOIN posts_to_user ON posts.postId = posts_to_user.postId WHERE posts_to_user.userId = @userid";
+        #endregion
+
+        #region MYSQL SELECT LOGGED USER POSTS
+        public static string select_user_posts = $"SELECT * FROM posts WHERE ownerId = @ownerId";
+        #endregion
+
+        #region MYSQL SELECT INTERESTED USERS
+        public static string select_interested_users = $"SELECT * FROM users JOIN posts_to_user ON users.id = posts_to_user.userId WHERE posts_to_user.postId = @postId";
+        #endregion
+
+        #region MYSQL CHANGE FOLLOWED ACCEPTANCESTATUS
+        public static string change_followed_status = $"UPDATE posts_to_user SET acceptanceStatus = @acceptanceStatus WHERE postId = @postId AND userId = @userId";
         #endregion
     }
 }

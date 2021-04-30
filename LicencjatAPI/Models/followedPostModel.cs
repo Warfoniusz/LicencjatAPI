@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LicencjatAPI.Models
 {
-    public class PostModel
+    public class followedPostModel
     {
         public string fullName { get; set; }
         public string postTitle { get; set; }
@@ -13,7 +13,6 @@ namespace LicencjatAPI.Models
         public string postCity { get; set; }
         public int userId { get; set; }
         public int postId { get; set; }
-        public string user_photo_base64 { get; set; }
-
+        public string acceptanceStatus { get; set; }
     }
 }
